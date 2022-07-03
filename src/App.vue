@@ -13,6 +13,7 @@
     <TouTiao icon="lishi" />
     <TouTiao icon="lishi" />
     <TouTiao icon="lishi" />
+    <TouTiao icon="shouji" />
 
     <router-view />
   </div>
