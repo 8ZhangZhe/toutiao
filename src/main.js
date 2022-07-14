@@ -6,11 +6,15 @@ import store from './store'
 import './styles/index.less'
 // 引入注册vant
 import Vant from 'vant'
-// 引入vant样式
+// vant主题定制方法：先在main.js里引入vant全部样式，用做定制主体样式
+// 再在vue.config.js里面配置css样式
 import 'vant/lib/index.less'
 
 // 引入amfe-flexible
 import 'amfe-flexible'
+
+// 引入 dayjs
+import '@/utils/dayjs'
 
 // 全局注册 <toutiao/> 组件,把图标封装成组件，通过传参使用
 import TouTiaoIcon from '@/components/TouTiaoIcon.vue'

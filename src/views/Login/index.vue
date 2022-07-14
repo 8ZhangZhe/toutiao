@@ -1,6 +1,10 @@
 <template>
   <div class="login-container">
-    <van-nav-bar title="登录" />
+    <van-nav-bar title="登录">
+      <template #left>
+          <van-icon name="cross" color="white" @click="$router.go(-1)"/>
+      </template>
+    </van-nav-bar>
     <van-form @submit="onSubmit" ref="form">
       <van-field
         v-model="user.mobile"
@@ -116,10 +120,17 @@ export default {
       try {
         const res = await login(this.user)
         console.log(res)
+        // 登录成功以后，获取的token数据，存储到vuex和本地存储中去
+        this.$store.commit('setUser', res.data.data)
         // 登陆成功 提示用户
-        // Toast === this.$toast
+        // Toast === this.$toast  用法一样
         Toast.success('登陆成功')
+
+        // 登陆成功跳转到首页
+        this.$router.push('/')
       } catch (e) {
+        // console.log(e)
+        // console.log('错误')
         // e >> 错误对象信息
         //
         Toast.fail(e.response.data.message || '服务器端错误')

@@ -14,6 +14,43 @@ const routes = [
     name: 'Login',
     path: '/login',
     component: () => import('@/views/Login')
+  },
+  {
+    name: 'dome',
+    path: '/dome',
+    component: () => import('@/views/dome.vue')
+  },
+  {
+    path: '/',
+    component: () => import('@/views/layout'),
+    children: [
+      {
+        path: 'home',
+        component: () => import('@/views/home')
+      },
+      {
+        path: 'qa',
+        component: () => import('@/views/qa')
+      },
+      {
+        path: 'video',
+        component: () => import('@/views/video')
+      },
+      {
+        path: 'my',
+        component: () => import('@/views/my')
+      }
+    ]
+  },
+  {
+    path: '/search',
+    component: () => import('@/views/search')
+  },
+  {
+    path: '/article/:articleId',
+    component: () => import('@/views/article/index.vue'),
+    // 将路由动态参数映射到组件的 props 中，更推荐这种做法
+    props: true
   }
 ]
 

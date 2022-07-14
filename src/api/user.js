@@ -17,3 +17,34 @@ export const getSmsCode = (mobile) => {
     url: `/v1_0/sms/codes/${mobile}`
   })
 }
+
+// 封装获取用户信息请求
+export const fetchUserInfo = () => {
+  return request({
+    method: 'GET',
+    url: '/v1_0/user'
+  })
+}
+
+/**
+ * 添加关注
+ */
+export const addFollow = (userId) => {
+  return request({
+    method: 'POST',
+    url: '/v1_0/user/followings',
+    data: {
+      target: userId
+    }
+  })
+}
+
+/**
+ * 取消关注
+ */
+export const deleteFollow = (userId) => {
+  return request({
+    method: 'DELETE',
+    url: `/v1_0/user/followings/${userId}`
+  })
+}
