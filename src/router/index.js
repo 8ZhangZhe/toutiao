@@ -51,6 +51,14 @@ const routes = [
     component: () => import('@/views/article/index.vue'),
     // 将路由动态参数映射到组件的 props 中，更推荐这种做法
     props: true
+  },
+  {
+    path: '/user/profile',
+    component: () => import('@/views/user-profile')
+  },
+  {
+    path: '/MyTest',
+    component: () => import('@/views/MyTest/index.vue')
   }
 ]
 

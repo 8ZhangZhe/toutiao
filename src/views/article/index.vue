@@ -47,7 +47,12 @@
         <van-divider>正文结束</van-divider>
 
         <!-- 评论 -->
-        <comment-list></comment-list>
+        <!-- 子组件触发自定义事件 @reply-click ，并传参过来 comment 点击的当前评论项，下面接收  -->
+        <comment-list
+          :list="commentList"
+          :source="acticleList.art_id"
+          @reply-click="onReplyClick"
+        ></comment-list>
         <!-- /评论 -->
       </div>
       <!-- /加载完成-文章详情 -->
@@ -72,7 +77,12 @@
 
     <!-- 底部区域 -->
     <div class="article-bottom">
-      <van-button class="comment-btn" type="default" round size="small"
+      <van-button
+        class="comment-btn"
+        type="default"
+        round
+        size="small"
+        @click="isPostShow = true"
         >写评论</van-button
       >
       <van-icon name="comment-o" :badge="acticleList.comm_count" color="#777" />
@@ -89,6 +99,25 @@
       <van-icon name="share" color="#777777"></van-icon>
     </div>
     <!-- /底部区域 -->
+
+    <!-- 写评论弹出层 -->
+    <van-popup v-model="isPostShow" position="bottom">
+      <comment-post
+        @postSuccess="postSuccess"
+        :target="acticleList.art_id"
+      ></comment-post>
+    </van-popup>
+    <!-- /写评论弹出层 -->
+
+    <!------------------------ 评论回复 ------------------------------>
+    <van-popup v-model="isReplyShow" position="bottom" style="height: 100%">
+      <comment-reply
+        v-if="isReplyShow"
+        @close="isReplyShow = false"
+        :currentComment="currentComment"
+      ></comment-reply>
+    </van-popup>
+    <!------------------------ /评论回复 ------------------------------>
   </div>
 </template>
 
@@ -101,10 +130,26 @@ import 'github-markdown-css'
 import { getArticleById } from '@/api/article.js'
 import { ImagePreview } from 'vant'
 import CommentList from './components/comment-list.vue'
+import CommentPost from './components/comment-post.vue'
+import CommentReply from './components/comment-reply.vue'
 export default {
   name: 'ArticleIndex',
-  components: { FollowUser, CollectArticle, likeArticle, CommentList },
+  components: {
+    FollowUser,
+    CollectArticle,
+    likeArticle,
+    CommentList,
+    CommentPost,
+    CommentReply
+  },
+  // 新方法： 父组件提供一个数据，子组件用 inject 接收注入，接完可以用
+  provide() {
+    return {
+      articleId: this.articleId
+    }
+  },
   props: {
+    // 父组件，路由配置，点击时直接传过来的文章id
     articleId: {
       type: [Number, String],
       required: true
@@ -112,9 +157,13 @@ export default {
   },
   data() {
     return {
+      isReplyShow: false,
+      commentList: [], // 评论列表
+      isPostShow: false, // 写评论弹层是否显示
       isNotFound: false,
       acticleList: {},
-      loading: false
+      loading: false,
+      currentComment: {} // 当前点击回复的评论项
     }
   },
   computed: {},
@@ -124,6 +173,15 @@ export default {
   },
   mounted() {},
   methods: {
+    onReplyClick(comment) {
+      console.log(111)
+      this.isReplyShow = true
+      this.currentComment = comment
+    },
+    postSuccess(data) {
+      this.commentList.unshift(data)
+      this.isPostShow = false
+    },
     previewIng() {
       // 获取所有的img图片
       // src属性
@@ -151,6 +209,7 @@ export default {
     async loadArtcileInfo() {
       try {
         this.loading = true
+        // 获取频道的文章列表请求
         const res = await getArticleById(this.articleId)
         console.log(res)
         this.acticleList = res.data.data

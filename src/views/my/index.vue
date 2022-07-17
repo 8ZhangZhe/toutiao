@@ -21,28 +21,30 @@
             class="avatar"
             round
           />
-          <span class="name">{{userInfo.name}}</span>
+          <span class="name">{{ userInfo.name }}</span>
         </div>
         <div class="right">
-          <van-button type="default" size="mini" round>编辑资料</van-button>
+          <van-button to="/user/profile" type="default" size="mini" round
+            >编辑资料</van-button
+          >
         </div>
       </div>
       <!-- 粉丝、关注 -->
       <div class="data">
         <div class="data-item">
-          <span>{{userInfo.art_count}}</span>
+          <span>{{ userInfo.art_count }}</span>
           <span>头条</span>
         </div>
         <div class="data-item">
-          <span>{{userInfo.follow_count}}</span>
+          <span>{{ userInfo.follow_count }}</span>
           <span>关注</span>
         </div>
         <div class="data-item">
-          <span>{{userInfo.fans_count}}</span>
+          <span>{{ userInfo.fans_count }}</span>
           <span>粉丝</span>
         </div>
         <div class="data-item">
-          <span>{{userInfo.like_count}}</span>
+          <span>{{ userInfo.like_count }}</span>
           <span>获赞</span>
         </div>
       </div>
@@ -74,7 +76,13 @@
     <van-cell title="用户反馈" is-link url="" />
     <van-cell title="小智同学" is-link url="" />
     <van-cell title="系统设置" is-link url="" />
-    <van-cell @click="logOut" v-if="user" class="logout-cell" title="退出登录" center />
+    <van-cell
+      @click="logOut"
+      v-if="user"
+      class="logout-cell"
+      title="退出登录"
+      center
+    />
   </div>
 </template>
 
@@ -85,7 +93,7 @@ export default {
   name: 'MyIndex',
   components: {},
   props: {},
-  data () {
+  data() {
     return {
       /**
        * @type {UserInfo.Data}
@@ -97,15 +105,15 @@ export default {
     ...mapState(['user'])
   },
   watch: {},
-  created () {
+  created() {
     // 判断有没有登录
     if (this.$store.state?.user?.token) {
       this.getUserInfo()
     }
   },
-  mounted () {},
+  mounted() {},
   methods: {
-    async logOut () {
+    async logOut() {
       await this.$dialog.confirm({
         title: '提示',
         message: '确认退出？'
@@ -117,7 +125,7 @@ export default {
       this.$store.commit('setUser', null)
     },
     // 封装获取用户信息方法
-    async getUserInfo () {
+    async getUserInfo() {
       const res = await fetchUserInfo()
       console.log('my/index里面的--获取用户信息数据如下')
       console.log(res)
@@ -132,7 +140,7 @@ export default {
   padding-bottom: 100px;
   .header {
     height: 361px;
-    background: url("~@/assets/banner.png");
+    background: url('~@/assets/banner.png');
     background-size: cover;
   }
 
